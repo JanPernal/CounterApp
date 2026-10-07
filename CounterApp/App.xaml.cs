@@ -1,6 +1,4 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-
-namespace CounterApp;
+﻿namespace CounterApp;
 
 public partial class App : Application
 {
