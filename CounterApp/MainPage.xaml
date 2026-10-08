@@ -1,15 +1,32 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="CounterApp.MainPage">
+             x:Class="CounterApp.MainPage"
+             xmlns:viewModels="clr-namespace:CounterApp.ViewModels"
+             x:DataType="viewModels:MainViewModel"
+             >
 
-    <ScrollView>
-        <VerticalStackLayout>
-            <Label Text="Counters" HorizontalOptions="Center" TextColor="Brown" Margin="10"></Label>
-            <Button x:Name="counterBtn1" Text="Counter 1" Margin="10" Clicked="counterBtn1_Clicked"></Button>
-            <Button x:Name="counterBtn2" Text="Counter 2" Margin="10" Clicked="counterBtn2_Clicked"></Button>
-            <Button x:Name="counterBtn3" Text="Counter 3" Margin="10" Clicked="counterBtn3_Clicked"></Button>
-        </VerticalStackLayout>
-    </ScrollView>
 
+    <Grid RowDefinitions="Auto,Auto,*" Padding="16" RowSpacing="12">
+        <Label Grid.Row="0" Text="Counters" HorizontalOptions="Center" TextColor="Brown"></Label>
+        <Grid Grid.Row="1" ColumnDefinitions="*,Auto" ColumnSpacing="8">
+            <Entry Grid.Column="0" Text="{Binding NewCounterName}" Placeholder="Counter name"/>
+            <Button Grid.Column="1" Text="New Counter" Command="{Binding AddCounterCommand}"/>
+        </Grid>
+        <CollectionView Grid.Row="2" ItemsSource="{Binding Counters}">
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="viewModels:CounterViewModel">
+                    <Grid ColumnDefinitions="*,Auto,Auto" Margin="8" ColumnSpacing="16">
+                        <Label Grid.Column="0" VerticalOptions="Center" Text="{Binding Name}"/>
+                        <Grid Grid.Column="1" ColumnDefinitions="Auto,Auto,Auto" ColumnSpacing="8">
+                            <Button Grid.Column="0" Text="-" Command="{Binding DecrementCommand}"/>
+                            <Label Grid.Column="1" VerticalOptions="Center" Text="{Binding Value}"/>
+                            <Button Grid.Column="2" Text="+" Command="{Binding IncrementCommand}"/>
+                        </Grid>
+                        <Button Grid.Column="2" Text="Reset" Command="{Binding ResetCommand}" />
+                    </Grid>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </Grid>
 </ContentPage>
