@@ -9,9 +9,10 @@ public partial class MainViewModel : ObservableObject
     public ObservableCollection<CounterViewModel> Counters {get; } = new();
 
     [ObservableProperty]
+    [NotifyCanExecuteChangedFor(nameof(AddCounterCommand))]
     private string newCounterName = "";
 
-    [RelayCommand]
+    [RelayCommand(CanExecute = nameof(CanAdd))]
     private void AddCounter()
     {
         CounterViewModel newCounter = new();
@@ -19,4 +20,5 @@ public partial class MainViewModel : ObservableObject
         Counters.Add(newCounter);
         NewCounterName = "";
     }
+    private bool CanAdd() => NewCounterName != "";
 }
