@@ -7,7 +7,7 @@
              >
 
 
-    <Grid RowDefinitions="Auto,Auto,*" Padding="16" RowSpacing="12">
+    <Grid RowDefinitions="Auto,Auto,*,Auto" Padding="16" RowSpacing="12">
         <Label Grid.Row="0" Text="Counters" HorizontalOptions="Center" TextColor="Brown"></Label>
         <Grid Grid.Row="1" ColumnDefinitions="*,Auto" ColumnSpacing="8">
             <Entry Grid.Column="0" Text="{Binding NewCounterName}" Placeholder="Counter name"/>
@@ -28,5 +28,6 @@
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>
+        <Button Grid.Row="3" Text="Save" HorizontalOptions="Center" Command="{Binding SaveCommand}"/>
     </Grid>
 </ContentPage>

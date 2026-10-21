@@ -1,6 +1,8 @@
 using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using CounterApp.Models;
+using CounterApp.Services;
 
 namespace CounterApp.ViewModels;
 
@@ -21,4 +23,15 @@ public partial class MainViewModel : ObservableObject
         NewCounterName = "";
     }
     private bool CanAdd() => NewCounterName != "";
+
+    [RelayCommand]
+    private async Task Save()
+    {
+        var storage = new XmlCounterStorage();   // temporary, DI replaces this later
+        await storage.SaveAsync(Counters.Select(vm => new Counter { Id = vm.Id
+            ,Name = vm.Name
+            ,Value = vm.Value
+            ,InitialValue = vm.InitialValue
+            ,ColorHex = vm.ColorHex }));
+    }
 }
