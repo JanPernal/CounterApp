@@ -27,11 +27,9 @@ Last updated: 2026-10-08. `[x]` = done, `[ ]` = to do.
 - [x] `MainPage.xaml`: `Grid` layout (`Auto,Auto,*`), `Entry`, `CollectionView` + `DataTemplate`
 - [x] "New Counter" disabled while the name is empty (`CanExecute`)
 - [x] `CounterPage` deleted, history cleaned and pushed
-- [ ] Small fix: `CanAdd` → `!string.IsNullOrWhiteSpace(NewCounterName)`
+- [x] `CanAdd` → `!string.IsNullOrWhiteSpace(...)`
 
-## In progress
-
-### Grade 4 (almost done): save state + load it on app start (format is free; using XML / XDocument)
+### Grade 4 — commits `18b8d5e`, `fe4a362`: save state + load it on app start (format is free; using XML / XDocument)
 Official requirement: counters are saved, and the saved state is loaded when the app starts.
 - [x] `Counter` model in `Models/` (plain data: Id, Name, Value, InitialValue, ColorHex)
 - [x] `ICounterStorage` interface with `Task<List<Counter>> LoadAsync()` and `Task SaveAsync(IEnumerable<Counter>)`
@@ -41,13 +39,13 @@ Official requirement: counters are saved, and the saved state is loaded when the
 - [x] Register storage, `MainViewModel` and `MainPage` in `MauiProgram.cs` (dependency injection)
 - [x] `MainPage` gets `MainViewModel` through its constructor instead of `new`
 - [x] Load counters on start (`OnAppearing` → `await LoadAsync()`), save with a "Save" button (`async Task` command)
-- [ ] Test: add counters, save, close the app fully, start again → counters are back
-- [ ] Cleanup: remove `Debug.WriteLine` in `SaveAsync` and the commented-out Load button
-- [ ] Commit + push
+- [x] Test: add counters, save, close the app fully, start again → counters are back
+- [x] Cleanup: remove `Debug.WriteLine` in `SaveAsync` and the commented-out Load button
+- [x] Commit + push
 
 Reading: interfaces in C#, async/await, LINQ to XML (`XDocument`, `XElement`), File system helpers, Dependency injection in MAUI.
 
-## To do
+## In progress
 
 ### Grade 5: autosave and initial value
 - [ ] Autosave whenever a counter changes (`partial void OnValueChanged`)
@@ -56,6 +54,8 @@ Reading: interfaces in C#, async/await, LINQ to XML (`XDocument`, `XElement`), F
 - [ ] Optional: creation form as a separate page (Shell navigation, `GoToAsync`)
 
 Reading: `[ObservableProperty]` → `On...Changed` partial methods, Shell navigation.
+
+## To do
 
 ### Grade 6: color, data storage, reset, delete
 - [ ] Color per counter: value converter string → `Color` (`Color.FromArgb`)

@@ -1,4 +1,3 @@
-using System.Diagnostics;
 using System.Xml.Linq;
 using CounterApp.Models;
 

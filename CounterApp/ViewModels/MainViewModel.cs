@@ -28,7 +28,7 @@ public partial class MainViewModel : ObservableObject
         Counters.Add(newCounter);
         NewCounterName = "";
     }
-    private bool CanAdd() => !string.IsNullOrWhiteSpace(newCounterName);
+    private bool CanAdd() => !string.IsNullOrWhiteSpace(NewCounterName);
 
     [RelayCommand]
     private async Task Save()
