@@ -16,9 +16,16 @@ public class XmlCounterStorage : ICounterStorage
         }
         await using FileStream stream = File.OpenRead(_filePath);
         XDocument doc = await XDocument.LoadAsync(stream, LoadOptions.None, CancellationToken.None);
-        return doc.Root!.Elements("Counter").Select(e => new Counter (
+        return doc.Root!.Elements("Counter").Select(e => new Counter
+        {
+            Id = (Guid?)e.Attribute("Id") ?? Guid.NewGuid(),
+            Name = (string?)e.Attribute("Name") ?? "",
+            Value = (int?)e.Attribute("Value") ?? 0,
+            InitialValue = (int?)e.Attribute("InitialValue") ?? 0,
+            ColorHex = (string?)e.Attribute("ColorHex") ?? "#512BD4"
 
-            )).ToList();
+        }).ToList();
+
     }
 
     public async Task SaveAsync(IEnumerable<Counter> counters)
@@ -34,6 +41,5 @@ public class XmlCounterStorage : ICounterStorage
         );
         await using FileStream stream = File.Create(_filePath);
         await counterStorage.SaveAsync(stream, SaveOptions.None, CancellationToken.None);
-        Debug.WriteLine("path: " +_filePath);
     }
 }

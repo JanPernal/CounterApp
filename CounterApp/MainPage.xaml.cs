@@ -4,9 +4,20 @@ namespace CounterApp;
 
 public partial class MainPage : ContentPage
 {
-    public MainPage()
+    private readonly MainViewModel _viewModel;
+
+    public MainPage(MainViewModel viewModel)
     {
         InitializeComponent();
-        BindingContext = new MainViewModel();
+        _viewModel = viewModel;
+        BindingContext = _viewModel;
     }
+
+    protected override void OnAppearing()
+    {
+        base.OnAppearing();
+        _viewModel.LoadCommand.Execute(null);
+    }
+
+
 }

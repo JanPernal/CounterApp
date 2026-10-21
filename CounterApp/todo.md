@@ -31,17 +31,19 @@ Last updated: 2026-10-08. `[x]` = done, `[ ]` = to do.
 
 ## In progress
 
-### Grade 4: save state + load it on app start (format is free; using XML / XDocument)
+### Grade 4 (almost done): save state + load it on app start (format is free; using XML / XDocument)
 Official requirement: counters are saved, and the saved state is loaded when the app starts.
 - [x] `Counter` model in `Models/` (plain data: Id, Name, Value, InitialValue, ColorHex)
 - [x] `ICounterStorage` interface with `Task<List<Counter>> LoadAsync()` and `Task SaveAsync(IEnumerable<Counter>)`
-- [ ] `XmlCounterStorage` using `XDocument` + file in `FileSystem.AppDataDirectory`
-- [ ] Handle first start: file does not exist yet → return an empty list
-- [ ] Mapping `Counter` ↔ `CounterViewModel` (both directions)
-- [ ] Register storage, `MainViewModel` and `MainPage` in `MauiProgram.cs` (dependency injection)
-- [ ] `MainPage` gets `MainViewModel` through its constructor instead of `new`
-- [ ] Load counters on start (`OnAppearing` → `await LoadAsync()`), save with a "Save" button (`async Task` command)
+- [x] `XmlCounterStorage` using `XDocument` + file in `FileSystem.AppDataDirectory`
+- [x] Handle first start: file does not exist yet → return an empty list
+- [x] Mapping `Counter` ↔ `CounterViewModel` (both directions)
+- [x] Register storage, `MainViewModel` and `MainPage` in `MauiProgram.cs` (dependency injection)
+- [x] `MainPage` gets `MainViewModel` through its constructor instead of `new`
+- [x] Load counters on start (`OnAppearing` → `await LoadAsync()`), save with a "Save" button (`async Task` command)
 - [ ] Test: add counters, save, close the app fully, start again → counters are back
+- [ ] Cleanup: remove `Debug.WriteLine` in `SaveAsync` and the commented-out Load button
+- [ ] Commit + push
 
 Reading: interfaces in C#, async/await, LINQ to XML (`XDocument`, `XElement`), File system helpers, Dependency injection in MAUI.
 

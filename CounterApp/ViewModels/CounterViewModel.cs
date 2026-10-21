@@ -1,5 +1,6 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using CounterApp.Models;
 
 namespace CounterApp.ViewModels;
 
@@ -27,4 +28,6 @@ public partial class CounterViewModel : ObservableObject
     private void Reset() => Value = InitialValue;
 
     private bool CanReset() => Value != InitialValue;
+    public Counter ToModel() => new Counter {Id = Id, Name = Name, Value = Value, InitialValue = InitialValue, ColorHex = ColorHex};
+    public static CounterViewModel FromModel(Counter c) => new CounterViewModel {Id = c.Id, Name = c.Name, Value = c.Value, InitialValue = c.InitialValue, ColorHex = c.ColorHex};
 }

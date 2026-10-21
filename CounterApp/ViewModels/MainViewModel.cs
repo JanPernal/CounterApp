@@ -8,6 +8,12 @@ namespace CounterApp.ViewModels;
 
 public partial class MainViewModel : ObservableObject
 {
+    private readonly ICounterStorage _storage;
+
+    public MainViewModel(ICounterStorage storage)
+    {
+        _storage = storage;
+    }
     public ObservableCollection<CounterViewModel> Counters {get; } = new();
 
     [ObservableProperty]
@@ -22,16 +28,22 @@ public partial class MainViewModel : ObservableObject
         Counters.Add(newCounter);
         NewCounterName = "";
     }
-    private bool CanAdd() => NewCounterName != "";
+    private bool CanAdd() => !string.IsNullOrWhiteSpace(newCounterName);
 
     [RelayCommand]
     private async Task Save()
     {
-        var storage = new XmlCounterStorage();   // temporary, DI replaces this later
-        await storage.SaveAsync(Counters.Select(vm => new Counter { Id = vm.Id
-            ,Name = vm.Name
-            ,Value = vm.Value
-            ,InitialValue = vm.InitialValue
-            ,ColorHex = vm.ColorHex }));
+        await _storage.SaveAsync(Counters.Select(vm => vm.ToModel()));
+    }
+
+    [RelayCommand]
+    private async Task Load()
+    {
+        var counters = await _storage.LoadAsync();
+        Counters.Clear();
+        foreach (var counter in counters)
+        {
+            Counters.Add(CounterViewModel.FromModel(counter));
+        }
     }
 }
