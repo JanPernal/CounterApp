@@ -20,16 +20,23 @@ public partial class MainViewModel : ObservableObject
     [NotifyCanExecuteChangedFor(nameof(AddCounterCommand))]
     private string newCounterName = "";
 
+    [ObservableProperty]
+    [NotifyCanExecuteChangedFor(nameof(AddCounterCommand))]
+    private string newInitialValue = "";
+
     [RelayCommand(CanExecute = nameof(CanAdd))]
     private async Task AddCounter()
     {
         CounterViewModel newCounter = new();
         newCounter.Name = NewCounterName;
+        TryGetInitialValue(out int parsedInitialValue);
+        newCounter.Value = newCounter.InitialValue = parsedInitialValue;
+        NewInitialValue = "";
         NewCounterName = "";
         AddToList(newCounter);
         await SaveAsync();
     }
-    private bool CanAdd() => !string.IsNullOrWhiteSpace(NewCounterName);
+    private bool CanAdd() => !string.IsNullOrWhiteSpace(NewCounterName) && TryGetInitialValue(out _);
 
     private async Task SaveAsync() => await _storage.SaveAsync(Counters.Select(vm => vm.ToModel()));
 
@@ -61,5 +68,15 @@ public partial class MainViewModel : ObservableObject
             Debug.Write(ex.ToString());
         }
 
+    }
+
+    private bool TryGetInitialValue(out int value)
+    {
+        if (string.IsNullOrWhiteSpace(NewInitialValue))
+        {
+            value = 0;
+            return true;
+        }
+        return int.TryParse(NewInitialValue, out value);
     }
 }

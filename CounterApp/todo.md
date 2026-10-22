@@ -48,9 +48,13 @@ Reading: interfaces in C#, async/await, LINQ to XML (`XDocument`, `XElement`), F
 ## In progress
 
 ### Grade 5: autosave and initial value
-- [ ] Autosave whenever a counter changes (`partial void OnValueChanged`)
-- [ ] Initial value chosen when creating a counter; new counter starts at it
-- [ ] `InitialValue` becomes an `[ObservableProperty]` (so Reset's `CanExecute` stays correct)
+- [x] Autosave whenever a counter changes (`partial void OnValueChanged`)
+- [x] Initial value chosen when creating a counter; new counter starts at it
+- [x] `InitialValue` becomes an `[ObservableProperty]` (so Reset's `CanExecute` stays correct)
+- [x] Test: new counter with initial value 5 starts at 5, Reset disabled until it changes, survives restart
+- [x] Check: negative initial value on iPhone numeric keypad → no minus key
+- [ ] Initial value as `string` + `int.TryParse` (empty = 0, invalid → New Counter disabled), default keyboard
+- [ ] Commit + push
 - [ ] Optional: creation form as a separate page (Shell navigation, `GoToAsync`)
 
 Reading: `[ObservableProperty]` → `On...Changed` partial methods, Shell navigation.

@@ -9,8 +9,11 @@ public partial class CounterViewModel : ObservableObject
 {
     public event Action? Changed;
     public Guid Id { get; set; } = Guid.NewGuid();
-    public int InitialValue { get; set; }
     public string ColorHex { get; set; } = "#512BD4";
+
+    [ObservableProperty]
+    [NotifyCanExecuteChangedFor(nameof(ResetCommand))]
+    private int initialValue;
 
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(ResetCommand))]

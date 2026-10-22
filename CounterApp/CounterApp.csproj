@@ -30,7 +30,7 @@
         <ApplicationTitle>CounterApp</ApplicationTitle>
 
         <!-- App Identifier -->
-        <ApplicationId>com.companyname.counterapp</ApplicationId>
+        <ApplicationId>com.janor.test</ApplicationId>
 
         <!-- Versions -->
         <ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
@@ -44,6 +44,12 @@
         <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">21.0</SupportedOSPlatformVersion>
         <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</SupportedOSPlatformVersion>
         <TargetPlatformMinVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</TargetPlatformMinVersion>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="$(TargetFramework.Contains('-ios')) and '$(Configuration)' == 'Debug'">
+        <RuntimeIdentifier>ios-arm64</RuntimeIdentifier>
+        <CodesignKey>Apple Development: janor.official.pl@gmail.com (XHVZ552M6D)</CodesignKey>
+        <CodesignProvision>iOS Team Provisioning Profile: com.janor.test</CodesignProvision>
     </PropertyGroup>
 
     <ItemGroup>
