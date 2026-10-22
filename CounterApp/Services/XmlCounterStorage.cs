@@ -6,6 +6,7 @@ namespace CounterApp.Services;
 public class XmlCounterStorage : ICounterStorage
 {
     private readonly string _filePath = Path.Combine(FileSystem.AppDataDirectory, "counters.xml");
+    private readonly SemaphoreSlim _lock = new(1, 1);
 
     public async Task<List<Counter>> LoadAsync()
     {
@@ -29,16 +30,25 @@ public class XmlCounterStorage : ICounterStorage
 
     public async Task SaveAsync(IEnumerable<Counter> counters)
     {
-        XDocument counterStorage = new XDocument(
-            new XElement("Counters",
-                counters.Select(c => new XElement("Counter", new XAttribute("Id", c.Id)
-                    , new XAttribute("Name", c.Name)
-                    , new XAttribute("Value", c.Value)
-                    , new XAttribute("InitialValue", c.InitialValue)
-                    , new XAttribute("ColorHex", c.ColorHex)))
+        await _lock.WaitAsync();
+        try
+        {
+            XDocument counterStorage = new XDocument(
+                new XElement("Counters",
+                    counters.Select(c => new XElement("Counter", new XAttribute("Id", c.Id)
+                        , new XAttribute("Name", c.Name)
+                        , new XAttribute("Value", c.Value)
+                        , new XAttribute("InitialValue", c.InitialValue)
+                        , new XAttribute("ColorHex", c.ColorHex)))
                 )
-        );
-        await using FileStream stream = File.Create(_filePath);
-        await counterStorage.SaveAsync(stream, SaveOptions.None, CancellationToken.None);
+            );
+            await using FileStream stream = File.Create(_filePath);
+            await counterStorage.SaveAsync(stream, SaveOptions.None, CancellationToken.None);
+        }
+        finally
+        {
+            _lock.Release();
+        }
+
     }
 }
