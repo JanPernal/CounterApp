@@ -1,6 +1,6 @@
 # CounterApp – roadmap
 
-Last updated: 2026-10-08. `[x]` = done, `[ ]` = to do.
+Last updated: 2026-10-23. `[x]` = done, `[ ]` = to do.
 
 ## Done
 
@@ -45,30 +45,39 @@ Official requirement: counters are saved, and the saved state is loaded when the
 
 Reading: interfaces in C#, async/await, LINQ to XML (`XDocument`, `XElement`), File system helpers, Dependency injection in MAUI.
 
-## In progress
-
-### Grade 5: autosave and initial value
+### Grade 5: autosave and initial value — commits `f9f7891`, `50ee711`
 - [x] Autosave whenever a counter changes (`partial void OnValueChanged`)
 - [x] Initial value chosen when creating a counter; new counter starts at it
 - [x] `InitialValue` becomes an `[ObservableProperty]` (so Reset's `CanExecute` stays correct)
 - [x] Test: new counter with initial value 5 starts at 5, Reset disabled until it changes, survives restart
 - [x] Check: negative initial value on iPhone numeric keypad → no minus key
-- [ ] Initial value as `string` + `int.TryParse` (empty = 0, invalid → New Counter disabled), default keyboard
-- [ ] Commit + push
-- [ ] Optional: creation form as a separate page (Shell navigation, `GoToAsync`)
+- [x] Initial value as `string` + `int.TryParse` (empty = 0, invalid → New Counter disabled), default keyboard
+- [x] Commit + push
+- [ ] Optional (later): creation form as a separate page (Shell navigation, `GoToAsync`)
 
-Reading: `[ObservableProperty]` → `On...Changed` partial methods, Shell navigation.
-
-## To do
+## In progress
 
 ### Grade 6: color, data storage, reset, delete
-- [ ] Color per counter: value converter string → `Color` (`Color.FromArgb`)
-- [ ] Data stored in a "more convenient" format (official: XML/XDocument or JSON) — XML is already done in Grade 4; optional extra: `JsonCounterStorage` swapped in via DI to show off the interface
-- [ ] Check the official task: is SQLite required, or was it only in the reading list?
-- [ ] Delete a counter, with `DisplayAlert` confirmation
 - [x] Reset to initial value (already done in Refactor 1)
+- [x] Data stored in a "more convenient" format: XML / XDocument (done in Grade 4)
+- [ ] Check the official task: is SQLite required, or was it only in the reading list?
 
-Reading: local SQLite database in MAUI, value converters, colors in MAUI, pop-ups.
+Step 1: delete a counter
+- [x] `[RelayCommand] async Task DeleteCounter(CounterViewModel counter)` in `MainViewModel`
+- [x] Confirmation with `DisplayAlertAsync` (returns `bool`; `DisplayAlert` is obsolete in .NET 10)
+- [x] Unsubscribe `counter.Changed -= OnCounterChanged`, remove from `Counters`, save
+- [x] "Delete" button in the `DataTemplate`, bound to the parent view model (`RelativeSource AncestorType`) with `CommandParameter="{Binding .}"`
+- [ ] Test: delete, restart → still gone; cancel → nothing happens
+
+Step 2: color per counter
+- [ ] Choose a color when creating a counter (a few preset colors)
+- [ ] `ColorHex` reaches the UI: value converter `string` → `Color` (`Color.FromArgb`), registered in XAML resources
+- [ ] Color is saved and loaded (already in the model and the XML)
+
+Step 3 (optional extra)
+- [ ] `JsonCounterStorage` swapped in via DI (one line in `MauiProgram.cs`) to show off the interface
+
+Reading: commands with parameters, `RelativeSource` bindings, pop-ups (`DisplayAlertAsync`), value converters, colors in MAUI, local SQLite database in MAUI.
 
 ## Extra materials
 - .NET MAUI Workshop (official, step by step: MVVM, CollectionView, navigation)

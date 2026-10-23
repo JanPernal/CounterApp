@@ -17,14 +17,22 @@
         <CollectionView Grid.Row="3" ItemsSource="{Binding Counters}">
             <CollectionView.ItemTemplate>
                 <DataTemplate x:DataType="viewModels:CounterViewModel">
-                    <Grid ColumnDefinitions="*,Auto,Auto" Margin="8" ColumnSpacing="16">
-                        <Label Grid.Column="0" VerticalOptions="Center" Text="{Binding Name}"/>
-                        <Grid Grid.Column="1" ColumnDefinitions="Auto,Auto,Auto" ColumnSpacing="8">
-                            <Button Grid.Column="0" Text="-" Command="{Binding DecrementCommand}"/>
-                            <Label Grid.Column="1" VerticalOptions="Center" Text="{Binding Value}"/>
-                            <Button Grid.Column="2" Text="+" Command="{Binding IncrementCommand}"/>
+                    <Grid RowDefinitions="Auto, Auto" Margin="8" RowSpacing="16">
+                        <Grid Grid.Row="0" ColumnDefinitions="*,Auto" Margin="8" ColumnSpacing="16">
+                            <Label Grid.Column="0" VerticalOptions="Center" Text="{Binding Name}"/>
+                            <Grid Grid.Column="1" ColumnDefinitions="Auto,Auto,Auto" ColumnSpacing="8">
+                                <Button Grid.Column="0" Text="-" Command="{Binding DecrementCommand}"/>
+                                <Label Grid.Column="1" VerticalOptions="Center" Text="{Binding Value}"/>
+                                <Button Grid.Column="2" Text="+" Command="{Binding IncrementCommand}"/>
+                            </Grid>
                         </Grid>
-                        <Button Grid.Column="2" Text="Reset" Command="{Binding ResetCommand}" />
+                        <Grid Grid.Row="1" ColumnDefinitions="*,*">
+                            <Button Grid.Column="0" Text="Reset" Command="{Binding ResetCommand}" />
+                            <Button Grid.Column="1" Text="Delete"
+                                    Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:MainViewModel}},
+                                    Path=DeleteCounterCommand}"
+                                    CommandParameter="{Binding .}" />
+                        </Grid>
                     </Grid>
                 </DataTemplate>
             </CollectionView.ItemTemplate>

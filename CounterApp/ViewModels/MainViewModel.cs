@@ -79,4 +79,15 @@ public partial class MainViewModel : ObservableObject
         }
         return int.TryParse(NewInitialValue, out value);
     }
+
+    [RelayCommand]
+    private async Task DeleteCounter(CounterViewModel counter)
+    {
+        bool confirmed = await Shell.Current.DisplayAlertAsync(
+            "Delete counter", $"Delete \"{counter.Name}\"?", "Delete", "Cancel");
+        if (!confirmed) return;
+        counter.Changed -= OnCounterChanged;
+        Counters.Remove(counter);
+        await SaveAsync();
+    }
 }
