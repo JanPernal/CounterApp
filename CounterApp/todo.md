@@ -73,8 +73,8 @@ Step 2: color per counter
 Design decision: a fixed palette of ~20 colors (same saturation + brightness, only hue changes). Each counter stores its base color as `ColorHex` (no model/XML change). Light/dark variants for buttons and icons are computed from it by the converter.
 - [x] 2a. `Converters/HexToColorConverter.cs` (`IValueConverter`, `Color.FromArgb`, fallback for empty/invalid text, `ConvertBack` not supported)
 - [x] 2b. Register it in `<ContentPage.Resources>` and use it to color each counter in the list
-- [ ] 2c. `ConverterParameter` variants: `Light` (button background) and `Dark` (icon), computed from the base color (`WithLuminosity` / `WithAlpha`)
-- [ ] 2d. `Models/ColorPalette.cs`: static list of hex colors generated from hue steps (`Color.FromHsv`, fixed S and V, `ToArgbHex`)
+- [x] 2c. `ConverterParameter` variants: `Light` (button background) and `Dark` (icon), rebuilt from the hue with `Color.FromHsla` (Light S70 L85, Dark S100 L24)
+- [ ] 2d. `Models/ColorPalette.cs`: static list of 20 base hex colors, `Color.FromHsla(i / 20.0, 1.0, 0.45)` → `ToArgbHex()`
 - [ ] 2e. `MainViewModel`: `AvailableColors` (from the palette), `NewColorHex`, `SelectColor(string hex)` command, `AddCounter` copies `NewColorHex`
 - [ ] 2f. Swatch grid in the form (`FlexLayout` wrap + `BindableLayout`), selected color visibly marked
 - [ ] Test: new counters get the chosen color, colors survive restart
