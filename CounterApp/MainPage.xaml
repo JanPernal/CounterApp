@@ -24,9 +24,17 @@
                         <Grid Grid.Row="0" ColumnDefinitions="*,Auto" Margin="8" ColumnSpacing="16">
                             <Label Grid.Column="0" VerticalOptions="Center" Text="{Binding Name}" TextColor="{Binding ColorHex, Converter={StaticResource HexToColor}}"/>
                             <Grid Grid.Column="1" ColumnDefinitions="Auto,Auto,Auto" ColumnSpacing="8">
-                                <Button Grid.Column="0" Text="-" Command="{Binding DecrementCommand}"/>
+                                <Button Grid.Column="0"
+                                        Text="-"
+                                        Command="{Binding DecrementCommand}"
+                                        BackgroundColor="{Binding ColorHex, Converter={StaticResource HexToColor}, ConverterParameter=Light}"
+                                        TextColor="{Binding ColorHex, Converter={StaticResource HexToColor}, ConverterParameter=Dark}"/>
                                 <Label Grid.Column="1" VerticalOptions="Center" Text="{Binding Value}"/>
-                                <Button Grid.Column="2" Text="+" Command="{Binding IncrementCommand}"/>
+                                <Button Grid.Column="2"
+                                        Text="+"
+                                        Command="{Binding IncrementCommand}"
+                                        BackgroundColor="{Binding ColorHex, Converter={StaticResource HexToColor}}"
+                                        TextColor="White"/>
                             </Grid>
                         </Grid>
                         <Grid Grid.Row="1" ColumnDefinitions="*,*">
