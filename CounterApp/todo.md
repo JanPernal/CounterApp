@@ -70,9 +70,20 @@ Step 1: delete a counter
 - [ ] Test: delete, restart → still gone; cancel → nothing happens
 
 Step 2: color per counter
-- [ ] Choose a color when creating a counter (a few preset colors)
-- [ ] `ColorHex` reaches the UI: value converter `string` → `Color` (`Color.FromArgb`), registered in XAML resources
-- [ ] Color is saved and loaded (already in the model and the XML)
+Design decision: a fixed palette of ~20 colors (same saturation + brightness, only hue changes). Each counter stores its base color as `ColorHex` (no model/XML change). Light/dark variants for buttons and icons are computed from it by the converter.
+- [x] 2a. `Converters/HexToColorConverter.cs` (`IValueConverter`, `Color.FromArgb`, fallback for empty/invalid text, `ConvertBack` not supported)
+- [x] 2b. Register it in `<ContentPage.Resources>` and use it to color each counter in the list
+- [ ] 2c. `ConverterParameter` variants: `Light` (button background) and `Dark` (icon), computed from the base color (`WithLuminosity` / `WithAlpha`)
+- [ ] 2d. `Models/ColorPalette.cs`: static list of hex colors generated from hue steps (`Color.FromHsv`, fixed S and V, `ToArgbHex`)
+- [ ] 2e. `MainViewModel`: `AvailableColors` (from the palette), `NewColorHex`, `SelectColor(string hex)` command, `AddCounter` copies `NewColorHex`
+- [ ] 2f. Swatch grid in the form (`FlexLayout` wrap + `BindableLayout`), selected color visibly marked
+- [ ] Test: new counters get the chosen color, colors survive restart
+
+Later: new UI (from the mockup)
+- [ ] Card per counter: `Border` with rounded corners, color dot + name, big value (`StringFormat='{0:N0}'` → 1,100)
+- [ ] `-` button in the light variant with a dark icon, `+` button in the base color with a white icon
+- [ ] `SwipeView`: swipe left → Delete (red, trash icon), swipe right → Reset (grey, reset icon)
+- [ ] Probably: creation form on its own page (Shell navigation)
 
 Step 3 (optional extra)
 - [ ] `JsonCounterStorage` swapped in via DI (one line in `MauiProgram.cs`) to show off the interface

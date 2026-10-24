@@ -3,10 +3,13 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="CounterApp.MainPage"
              xmlns:viewModels="clr-namespace:CounterApp.ViewModels"
+             xmlns:converters="clr-namespace:CounterApp.Converters"
              x:DataType="viewModels:MainViewModel"
              >
 
-
+    <ContentPage.Resources>
+        <converters:HexToColorConverter x:Key="HexToColor" />
+    </ContentPage.Resources>
     <Grid RowDefinitions="Auto,Auto,Auto,*" Padding="16" RowSpacing="12">
         <Label Grid.Row="0" Text="Counters" HorizontalOptions="Center" TextColor="Brown"></Label>
         <Entry Grid.Row="1" Text="{Binding NewCounterName}" Placeholder="Counter name"/>
@@ -19,7 +22,7 @@
                 <DataTemplate x:DataType="viewModels:CounterViewModel">
                     <Grid RowDefinitions="Auto, Auto" Margin="8" RowSpacing="16">
                         <Grid Grid.Row="0" ColumnDefinitions="*,Auto" Margin="8" ColumnSpacing="16">
-                            <Label Grid.Column="0" VerticalOptions="Center" Text="{Binding Name}"/>
+                            <Label Grid.Column="0" VerticalOptions="Center" Text="{Binding Name}" TextColor="{Binding ColorHex, Converter={StaticResource HexToColor}}"/>
                             <Grid Grid.Column="1" ColumnDefinitions="Auto,Auto,Auto" ColumnSpacing="8">
                                 <Button Grid.Column="0" Text="-" Command="{Binding DecrementCommand}"/>
                                 <Label Grid.Column="1" VerticalOptions="Center" Text="{Binding Value}"/>
