@@ -75,8 +75,10 @@ Design decision: a fixed palette of ~20 colors (same saturation + brightness, on
 - [x] 2b. Register it in `<ContentPage.Resources>` and use it to color each counter in the list
 - [x] 2c. `ConverterParameter` variants: `Light` (button background) and `Dark` (icon), rebuilt from the hue with `Color.FromHsla` (Light S70 L85, Dark S100 L24)
 - [x] 2d. `Models/ColorPalette.cs`: static list of 20 base hex colors, `Color.FromHsla(i / 20.0, 1.0, 0.45)` → `ToArgbHex()`
-- [ ] 2e. `MainViewModel`: `AvailableColors` (from the palette), `NewColorHex`, `SelectColor(string hex)` command, `AddCounter` copies `NewColorHex`
-- [ ] 2f. Swatch grid in the form (`FlexLayout` wrap + `BindableLayout`), selected color visibly marked
+- [x] 2e. `MainViewModel`: `AvailableColors` (from the palette), `NewColorHex`, `SelectColor(string hex)` command, `AddCounter` copies `NewColorHex`
+- [x] 2d+. Official Figma palette: 10 hand-picked base colors (equal hue steps gave near-identical greens and blues); Light/Dark still computed from the hue
+- [x] 2f. Swatch grid in the form (`FlexLayout` wrap + `BindableLayout`) calling `SelectColorCommand`
+- [ ] 2g. Selected swatch visibly marked: `ColorOptionViewModel` (Hex + `IsSelected`) + `DataTrigger`
 - [ ] Test: new counters get the chosen color, colors survive restart
 
 Later: new UI (from the mockup)

@@ -2,8 +2,19 @@ namespace CounterApp.Models;
 
 public static class ColorPalette
 {
-    public const int Count = 20;
-    public static string Default => BaseColors[12];
-    public static IReadOnlyList<string> BaseColors { get; }
-        = Enumerable.Range(0, Count).Select(i => Color.FromHsla(i / (double)Count, 1.0, 0.45).ToArgbHex()).ToList();
+    public static string Default => BaseColors[5];
+
+    public static IReadOnlyList<string> BaseColors { get; } =
+    [
+        "#E40000",
+        "#E46A00",
+        "#E4C500",
+        "#4AC200",
+        "#0A9488",
+        "#0090E4",
+        "#2E00E4",
+        "#6E00E4",
+        "#AF00E4",
+        "#E400AF"
+    ];
 }

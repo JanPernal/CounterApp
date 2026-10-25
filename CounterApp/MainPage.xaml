@@ -10,7 +10,7 @@
     <ContentPage.Resources>
         <converters:HexToColorConverter x:Key="HexToColor" />
     </ContentPage.Resources>
-    <Grid RowDefinitions="Auto,Auto,Auto,*" Padding="16" RowSpacing="12">
+    <Grid RowDefinitions="Auto,Auto,Auto,Auto,*" Padding="16" RowSpacing="12">
         <Label Grid.Row="0" Text="Counters" HorizontalOptions="Center" TextColor="Brown"></Label>
         <Entry Grid.Row="1" Text="{Binding NewCounterName}" Placeholder="Counter name"/>
         <Grid Grid.Row="2" ColumnDefinitions="*,Auto,Auto" ColumnSpacing="8">
@@ -19,7 +19,20 @@
             <BoxView Grid.Column="2" Color="{Binding NewColorHex, Converter={StaticResource HexToColor}}"
                      WidthRequest="24" HeightRequest="24" CornerRadius="12"/>
         </Grid>
-        <CollectionView Grid.Row="3" ItemsSource="{Binding Counters}">
+        <FlexLayout Grid.Row="3" Wrap="Wrap"
+                    BindableLayout.ItemsSource="{Binding AvailableColors}">
+            <BindableLayout.ItemTemplate>
+                <DataTemplate x:DataType="x:String">
+                    <Button BackgroundColor="{Binding ., Converter={StaticResource HexToColor}}"
+                            Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:MainViewModel}},
+                            Path=SelectColorCommand}"
+                            CommandParameter="{Binding .}"
+                            WidthRequest="32" HeightRequest="32" CornerRadius="8"
+                            Margin="4"/>
+                </DataTemplate>
+            </BindableLayout.ItemTemplate>
+        </FlexLayout>
+        <CollectionView Grid.Row="4" ItemsSource="{Binding Counters}">
             <CollectionView.ItemTemplate>
                 <DataTemplate x:DataType="viewModels:CounterViewModel">
                     <Grid RowDefinitions="Auto, Auto" Margin="8" RowSpacing="16">
