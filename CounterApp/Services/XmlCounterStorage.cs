@@ -22,7 +22,7 @@ public class XmlCounterStorage : ICounterStorage
             Name = (string?)e.Attribute("Name") ?? "",
             Value = (int?)e.Attribute("Value") ?? 0,
             InitialValue = (int?)e.Attribute("InitialValue") ?? 0,
-            ColorHex = (string?)e.Attribute("ColorHex") ?? ColorPalette.BaseColors[3]
+            ColorHex = (string?)e.Attribute("ColorHex") ?? ColorPalette.Default
         }).ToList();
 
     }

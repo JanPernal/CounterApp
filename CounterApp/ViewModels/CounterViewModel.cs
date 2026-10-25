@@ -9,7 +9,7 @@ public partial class CounterViewModel : ObservableObject
 {
     public event Action? Changed;
     public Guid Id { get; set; } = Guid.NewGuid();
-    public string ColorHex { get; set; } = ColorPalette.BaseColors[3];
+    public string ColorHex { get; set; } = ColorPalette.Default;
 
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(ResetCommand))]

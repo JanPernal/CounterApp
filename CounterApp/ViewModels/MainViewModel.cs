@@ -2,6 +2,7 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using CounterApp.Models;
 using CounterApp.Services;
 
 namespace CounterApp.ViewModels;
@@ -9,12 +10,16 @@ namespace CounterApp.ViewModels;
 public partial class MainViewModel : ObservableObject
 {
     private readonly ICounterStorage _storage;
+    public IReadOnlyList<string> AvailableColors => ColorPalette.BaseColors;
 
     public MainViewModel(ICounterStorage storage)
     {
         _storage = storage;
     }
     public ObservableCollection<CounterViewModel> Counters {get; } = new();
+
+    [ObservableProperty]
+    private string newColorHex = ColorPalette.Default;
 
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(AddCounterCommand))]
@@ -31,6 +36,7 @@ public partial class MainViewModel : ObservableObject
         newCounter.Name = NewCounterName;
         TryGetInitialValue(out int parsedInitialValue);
         newCounter.Value = newCounter.InitialValue = parsedInitialValue;
+        newCounter.ColorHex = NewColorHex;
         NewInitialValue = "";
         NewCounterName = "";
         AddToList(newCounter);
@@ -89,5 +95,11 @@ public partial class MainViewModel : ObservableObject
         counter.Changed -= OnCounterChanged;
         Counters.Remove(counter);
         await SaveAsync();
+    }
+
+    [RelayCommand]
+    private void SelectColor(string colorHex)
+    {
+        NewColorHex = colorHex;
     }
 }

@@ -6,5 +6,5 @@ public class Counter
     public string Name { get; set; } = "";
     public int Value { get; set; } = 0;
     public int InitialValue { get; set; } = 0;
-    public string ColorHex { get; set; } = ColorPalette.BaseColors[3];
+    public string ColorHex { get; set; } = ColorPalette.Default;
 }
