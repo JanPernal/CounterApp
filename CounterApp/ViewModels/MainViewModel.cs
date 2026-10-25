@@ -10,7 +10,11 @@ namespace CounterApp.ViewModels;
 public partial class MainViewModel : ObservableObject
 {
     private readonly ICounterStorage _storage;
-    public IReadOnlyList<string> AvailableColors => ColorPalette.BaseColors;
+
+    public IReadOnlyList<ColorOptionViewModel> AvailableColors { get; } =
+        ColorPalette.BaseColors
+            .Select(c => new ColorOptionViewModel { Hex = c, IsSelected = c == ColorPalette.Default })
+            .ToList();
 
     public MainViewModel(ICounterStorage storage)
     {
@@ -98,8 +102,12 @@ public partial class MainViewModel : ObservableObject
     }
 
     [RelayCommand]
-    private void SelectColor(string colorHex)
+    private void SelectColor(ColorOptionViewModel option)
     {
-        NewColorHex = colorHex;
+        NewColorHex = option.Hex;
+        foreach (var color in AvailableColors)
+        {
+            color.IsSelected = color == option;
+        }
     }
 }
