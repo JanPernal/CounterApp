@@ -37,7 +37,7 @@ public partial class MainViewModel : ObservableObject
     private async Task AddCounter()
     {
         CounterViewModel newCounter = new();
-        newCounter.Name = NewCounterName;
+        newCounter.Name = string.IsNullOrWhiteSpace(NewCounterName) ? $"Counter {Counters.Count + 1}" : NewCounterName.Trim() ;
         TryGetInitialValue(out int parsedInitialValue);
         newCounter.Value = newCounter.InitialValue = parsedInitialValue;
         newCounter.ColorHex = NewColorHex;
@@ -46,7 +46,7 @@ public partial class MainViewModel : ObservableObject
         AddToList(newCounter);
         await SaveAsync();
     }
-    private bool CanAdd() => !string.IsNullOrWhiteSpace(NewCounterName) && TryGetInitialValue(out _);
+    private bool CanAdd() => TryGetInitialValue(out _);
 
     private async Task SaveAsync() => await _storage.SaveAsync(Counters.Select(vm => vm.ToModel()));
 
