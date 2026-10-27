@@ -2,14 +2,44 @@
 
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="CounterApp.MainPage"
              xmlns:viewModels="clr-namespace:CounterApp.ViewModels"
-             xmlns:converters="clr-namespace:CounterApp.Converters"
+             xmlns:views="clr-namespace:CounterApp.Views"
+             x:Class="CounterApp.MainPage"
              x:DataType="viewModels:MainViewModel"
              BackgroundColor="{StaticResource PageBackground}">
     <ContentPage.Resources>
-        <converters:HexToColorConverter x:Key="HexToColor" />
+        <!-- Phone / tablet: swipe -->
+        <DataTemplate x:Key="SwipeCounterTemplate" x:DataType="viewModels:CounterViewModel">
+            <SwipeView>
+                <SwipeView.LeftItems>
+                    <SwipeItems>
+                        <SwipeItem Text="Reset" BackgroundColor="LightGray"
+                                   Command="{Binding ResetCommand}" />
+                    </SwipeItems>
+                </SwipeView.LeftItems>
+                <SwipeView.RightItems>
+                    <SwipeItems>
+                        <SwipeItem Text="Delete" BackgroundColor="#B33A3A"
+                                   Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:MainViewModel}}, Path=DeleteCounterCommand}"
+                                   CommandParameter="{Binding .}" />
+                    </SwipeItems>
+                </SwipeView.RightItems>
+                <views:CounterCard />
+            </SwipeView>
+        </DataTemplate>
+
+        <!-- Desktop: card + buttons -->
+        <DataTemplate x:Key="ButtonsCounterTemplate" x:DataType="viewModels:CounterViewModel">
+            <Grid ColumnDefinitions="*,Auto,Auto" ColumnSpacing="12">
+                <views:CounterCard Grid.Column="0" />
+                <Button Grid.Column="1" Text="Reset" Command="{Binding ResetCommand}" VerticalOptions="Center" />
+                <Button Grid.Column="2" Text="Delete"
+                        Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:MainViewModel}}, Path=DeleteCounterCommand}"
+                        CommandParameter="{Binding .}" VerticalOptions="Center" />
+            </Grid>
+        </DataTemplate>
     </ContentPage.Resources>
+
     <Grid RowDefinitions="Auto,Auto,Auto,Auto,*" Padding="16" RowSpacing="12">
         <Entry Grid.Row="1" Text="{Binding NewCounterName}" Placeholder="Counter name" />
         <Grid Grid.Row="2" ColumnDefinitions="*,Auto,Auto" ColumnSpacing="8">
@@ -38,67 +68,11 @@
                 </DataTemplate>
             </BindableLayout.ItemTemplate>
         </FlexLayout>
-        <CollectionView Grid.Row="4" ItemsSource="{Binding Counters}">
-            <CollectionView.ItemsLayout>
-                <LinearItemsLayout Orientation="Vertical" ItemSpacing="36" />
-            </CollectionView.ItemsLayout>
-            <CollectionView.ItemTemplate>
-                <DataTemplate x:DataType="viewModels:CounterViewModel">
-                    <Border StrokeThickness="0" Padding="36" BackgroundColor="{StaticResource CardBackground}">
-                        <Border.StrokeShape>
-                            <RoundRectangle CornerRadius="50" />
-                        </Border.StrokeShape>
-                        <Grid RowDefinitions="Auto, Auto">
-                            <Grid Grid.Row="0" ColumnDefinitions="*, Auto">
-                                <Grid Grid.Column="0" RowDefinitions="Auto, Auto">
-                                    <HorizontalStackLayout Grid.Row="0" Spacing="8">
-                                        <BoxView
-                                            BackgroundColor="{Binding ColorHex, Converter={StaticResource HexToColor}}"
-                                            WidthRequest="16" HeightRequest="16" CornerRadius="8" />
-                                        <Label VerticalOptions="Center" Text="{Binding Name}"
-                                               Style="{StaticResource CounterName}"/>
-                                    </HorizontalStackLayout>
-                                    <Label Grid.Row="1" Text="{Binding Value, StringFormat='{0:N0}'}"
-                                           Style="{StaticResource Value}"/>
-                                </Grid>
-                                <Border Grid.Column="1" StrokeThickness="0"
-                                        BackgroundColor="{Binding ColorHex, Converter={StaticResource HexToColor}, ConverterParameter=Light}">
-                                    <Border.StrokeShape>
-                                        <RoundRectangle CornerRadius="24" />
-                                    </Border.StrokeShape>
-                                    <Grid ColumnDefinitions="*,*">
-                                        <Button Grid.Column="0"
-                                                Text="−"
-                                                Command="{Binding DecrementCommand}"
-                                                BackgroundColor="Transparent"
-                                                TextColor="{Binding ColorHex, Converter={StaticResource HexToColor}, ConverterParameter=Dark}"
-                                                Padding="15, 0, 15, 6"
-                                                Style="{StaticResource PillBtn}" />
-                                        <Button
-                                            Grid.Column="1"
-                                            CornerRadius="24"
-                                            Text="+"
-                                            Command="{Binding IncrementCommand}"
-                                            BackgroundColor="{Binding ColorHex, Converter={StaticResource HexToColor}}"
-                                            TextColor="{StaticResource CardBackground}"
-                                            Padding="15, 0, 15, 6"
-                                            Style="{StaticResource PillBtn}" />
-                                    </Grid>
-                                </Border>
+        <CollectionView Grid.Row="4" ItemsSource="{Binding Counters}"
+                        ItemTemplate="{OnIdiom Phone={StaticResource SwipeCounterTemplate},
+                                               Tablet={StaticResource SwipeCounterTemplate},
+                                               Default={StaticResource ButtonsCounterTemplate}}">
 
-                            </Grid>
-                            <Grid Grid.Row="1" ColumnDefinitions="*,*">
-                                <Button Grid.Column="0" Text="Reset" Command="{Binding ResetCommand}" />
-                                <Button Grid.Column="1" Text="Delete"
-                                        Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:MainViewModel}},
-                                    Path=DeleteCounterCommand}"
-                                        CommandParameter="{Binding .}" />
-                            </Grid>
-                        </Grid>
-
-                    </Border>
-                </DataTemplate>
-            </CollectionView.ItemTemplate>
         </CollectionView>
     </Grid>
 </ContentPage>

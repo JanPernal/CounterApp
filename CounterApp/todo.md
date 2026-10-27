@@ -88,14 +88,16 @@ Reading: commands with parameters, `RelativeSource` bindings, pop-ups (`DisplayA
 
 ### New UI (from the Figma mockup)
 Step A: counter card
-- [ ] `Border` with rounded corners (`StrokeShape="RoundRectangle 24"`), light grey background, no stroke
-- [ ] Top-left: color dot (`BoxView` / `Ellipse`) + name in small text
-- [ ] Big bold value with thousands separator (`StringFormat='{0:N0}'` → 1,100)
-- [ ] Right: `−` / `+` pill (light variant + dark icon, base color + white icon)
+- [x] `Border` with rounded corners (`StrokeShape="RoundRectangle 24"`), light grey background, no stroke
+- [x] Top-left: color dot (`BoxView` / `Ellipse`) + name in small text
+- [x] Big bold value with thousands separator (`StringFormat='{0:N0}'` → 1,100)
+- [x] Right: `−` / `+` pill (light variant + dark icon, base color + white icon)
 
 Step B: swipe actions
-- [ ] `SwipeView` around the card: swipe left → Delete (red, trash icon, keeps the confirmation), swipe right → Reset (grey, reset icon)
-- [ ] Remove the old Reset / Delete buttons
+- [x] `SwipeView` around the card: swipe left → Delete (red, trash icon, keeps the confirmation), swipe right → Reset (grey, reset icon)
+- [x] Remove the old Reset / Delete buttons
+- [x] Card extracted to `Views/CounterCard.xaml` (ContentView); `HexToColor` moved to `App.xaml`
+- [x] Responsive: `OnIdiom` picks `SwipeCounterTemplate` (phone/tablet) or `ButtonsCounterTemplate` (desktop)
 
 Step C: creation form on its own page
 - [ ] `NewCounterPage` + Shell route, `GoToAsync`, "+" in the main page header

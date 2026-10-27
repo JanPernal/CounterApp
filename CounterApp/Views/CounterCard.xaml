@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewModels="clr-namespace:CounterApp.ViewModels"
+             x:Class="CounterApp.Views.CounterCard"
+             x:DataType="viewModels:CounterViewModel">
+    <Border StrokeThickness="0" Padding="36" BackgroundColor="{StaticResource CardBackground}">
+        <Border.StrokeShape>
+            <RoundRectangle CornerRadius="50" />
+        </Border.StrokeShape>
+
+        <Grid ColumnDefinitions="*, Auto">
+            <Grid Grid.Column="0" RowDefinitions="Auto, Auto">
+                <HorizontalStackLayout Grid.Row="0" Spacing="8">
+                    <BoxView
+                        BackgroundColor="{Binding ColorHex, Converter={StaticResource HexToColor}}"
+                        WidthRequest="16" HeightRequest="16" CornerRadius="8" />
+                    <Label VerticalOptions="Center" Text="{Binding Name}"
+                           Style="{StaticResource CounterName}" />
+                </HorizontalStackLayout>
+                <Label Grid.Row="1" Text="{Binding Value, StringFormat='{0:N0}'}"
+                       Style="{StaticResource Value}" />
+            </Grid>
+            <Border Grid.Column="1" StrokeThickness="0"
+                    BackgroundColor="{Binding ColorHex, Converter={StaticResource HexToColor}, ConverterParameter=Light}">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="24" />
+                </Border.StrokeShape>
+                <Grid ColumnDefinitions="*,*">
+                    <Button Grid.Column="0"
+                            Text="−"
+                            Command="{Binding DecrementCommand}"
+                            BackgroundColor="Transparent"
+                            TextColor="{Binding ColorHex, Converter={StaticResource HexToColor}, ConverterParameter=Dark}"
+                            Padding="15, 0, 15, 6"
+                            Style="{StaticResource PillBtn}" />
+                    <Button
+                        Grid.Column="1"
+                        CornerRadius="24"
+                        Text="+"
+                        Command="{Binding IncrementCommand}"
+                        BackgroundColor="{Binding ColorHex, Converter={StaticResource HexToColor}}"
+                        TextColor="{StaticResource CardBackground}"
+                        Padding="15, 0, 15, 6"
+                        Style="{StaticResource PillBtn}" />
+                </Grid>
+            </Border>
+        </Grid>
+    </Border>
+</ContentView>
