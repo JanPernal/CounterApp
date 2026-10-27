@@ -1,23 +1,23 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+﻿<?xml version="1.0" encoding="utf-8"?>
+
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="CounterApp.MainPage"
              xmlns:viewModels="clr-namespace:CounterApp.ViewModels"
              xmlns:converters="clr-namespace:CounterApp.Converters"
              x:DataType="viewModels:MainViewModel"
-             >
-
+             BackgroundColor="#FCFCFC">
     <ContentPage.Resources>
         <converters:HexToColorConverter x:Key="HexToColor" />
     </ContentPage.Resources>
     <Grid RowDefinitions="Auto,Auto,Auto,Auto,*" Padding="16" RowSpacing="12">
-        <Label Grid.Row="0" Text="Counters" HorizontalOptions="Center" TextColor="Brown"></Label>
-        <Entry Grid.Row="1" Text="{Binding NewCounterName}" Placeholder="Counter name"/>
+        <Label Grid.Row="0" Text="Counters" HorizontalOptions="Center" TextColor="Brown" />
+        <Entry Grid.Row="1" Text="{Binding NewCounterName}" Placeholder="Counter name" />
         <Grid Grid.Row="2" ColumnDefinitions="*,Auto,Auto" ColumnSpacing="8">
-            <Entry Grid.Column="0" Text="{Binding NewInitialValue}" Placeholder="Initial value"/>
-            <Button Grid.Column="1" Text="New Counter" Command="{Binding AddCounterCommand}"/>
+            <Entry Grid.Column="0" Text="{Binding NewInitialValue}" Placeholder="Initial value" />
+            <Button Grid.Column="1" Text="New Counter" Command="{Binding AddCounterCommand}" />
             <BoxView Grid.Column="2" Color="{Binding NewColorHex, Converter={StaticResource HexToColor}}"
-                     WidthRequest="24" HeightRequest="24" CornerRadius="12"/>
+                     WidthRequest="24" HeightRequest="24" CornerRadius="12" />
         </Grid>
         <FlexLayout Grid.Row="3" Wrap="Wrap"
                     BindableLayout.ItemsSource="{Binding AvailableColors}">
@@ -31,8 +31,8 @@
                             Margin="4">
                         <Button.Triggers>
                             <DataTrigger TargetType="Button" Binding="{Binding IsSelected}" Value="True">
-                                <Setter Property="BorderColor" Value="Black"/>
-                                <Setter Property="BorderWidth" Value="3"/>
+                                <Setter Property="BorderColor" Value="Black" />
+                                <Setter Property="BorderWidth" Value="3" />
                             </DataTrigger>
                         </Button.Triggers>
                     </Button>
@@ -40,33 +40,68 @@
             </BindableLayout.ItemTemplate>
         </FlexLayout>
         <CollectionView Grid.Row="4" ItemsSource="{Binding Counters}">
+            <CollectionView.ItemsLayout>
+                <LinearItemsLayout Orientation="Vertical" ItemSpacing="36" />
+            </CollectionView.ItemsLayout>
             <CollectionView.ItemTemplate>
                 <DataTemplate x:DataType="viewModels:CounterViewModel">
-                    <Grid RowDefinitions="Auto, Auto" Margin="8" RowSpacing="16">
-                        <Grid Grid.Row="0" ColumnDefinitions="*,Auto" Margin="8" ColumnSpacing="16">
-                            <Label Grid.Column="0" VerticalOptions="Center" Text="{Binding Name}" TextColor="{Binding ColorHex, Converter={StaticResource HexToColor}}"/>
-                            <Grid Grid.Column="1" ColumnDefinitions="Auto,Auto,Auto" ColumnSpacing="8">
-                                <Button Grid.Column="0"
-                                        Text="-"
-                                        Command="{Binding DecrementCommand}"
-                                        BackgroundColor="{Binding ColorHex, Converter={StaticResource HexToColor}, ConverterParameter=Light}"
-                                        TextColor="{Binding ColorHex, Converter={StaticResource HexToColor}, ConverterParameter=Dark}"/>
-                                <Label Grid.Column="1" VerticalOptions="Center" Text="{Binding Value}"/>
-                                <Button Grid.Column="2"
-                                        Text="+"
-                                        Command="{Binding IncrementCommand}"
-                                        BackgroundColor="{Binding ColorHex, Converter={StaticResource HexToColor}}"
-                                        TextColor="White"/>
+                    <Border StrokeThickness="0" Padding="36" BackgroundColor="#F3F3F3">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="50" />
+                        </Border.StrokeShape>
+                        <Grid RowDefinitions="Auto, Auto">
+                            <Grid Grid.Row="0" ColumnDefinitions="*, Auto">
+                                <Grid Grid.Column="0" RowDefinitions="Auto, Auto">
+                                    <HorizontalStackLayout Grid.Row="0" Spacing="8">
+                                        <BoxView
+                                            BackgroundColor="{Binding ColorHex, Converter={StaticResource HexToColor}}"
+                                            WidthRequest="16" HeightRequest="16" CornerRadius="8" />
+                                        <Label VerticalOptions="Center" Text="{Binding Name}"
+                                               Style="{StaticResource CounterName}" />
+                                    </HorizontalStackLayout>
+                                    <Label Grid.Row="1" Text="{Binding Value, StringFormat='{0:N0}'}"
+                                           Style="{StaticResource Value}" />
+                                </Grid>
+                                <Border Grid.Column="1" StrokeThickness="0"
+                                        BackgroundColor="{Binding ColorHex, Converter={StaticResource HexToColor}, ConverterParameter=Light}">
+                                    <Border.StrokeShape>
+                                        <RoundRectangle CornerRadius="24" />
+                                    </Border.StrokeShape>
+                                    <Grid ColumnDefinitions="*,*">
+                                        <Button Grid.Column="0"
+                                                Text="-"
+                                                Command="{Binding DecrementCommand}"
+                                                BackgroundColor="Transparent"
+                                                TextColor="{Binding ColorHex, Converter={StaticResource HexToColor}, ConverterParameter=Dark}"
+                                                Padding="15, 0, 15, 6"
+                                                Style="{StaticResource PillBtn}" />
+                                        <Border Grid.Column="1" StrokeThickness="0"
+                                                BackgroundColor="{Binding ColorHex, Converter={StaticResource HexToColor}, ConverterParameter=Light}">
+                                            <Border.StrokeShape>
+                                                <RoundRectangle CornerRadius="24" />
+                                            </Border.StrokeShape>
+                                            <Button
+                                                Text="+"
+                                                Command="{Binding IncrementCommand}"
+                                                BackgroundColor="{Binding ColorHex, Converter={StaticResource HexToColor}}"
+                                                TextColor="White"
+                                                Padding="15, 0, 15, 6"
+                                                Style="{StaticResource PillBtn}" />
+                                        </Border>
+                                    </Grid>
+                                </Border>
+
+                            </Grid>
+                            <Grid Grid.Row="1" ColumnDefinitions="*,*">
+                                <Button Grid.Column="0" Text="Reset" Command="{Binding ResetCommand}" />
+                                <Button Grid.Column="1" Text="Delete"
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:MainViewModel}},
+                                    Path=DeleteCounterCommand}"
+                                        CommandParameter="{Binding .}" />
                             </Grid>
                         </Grid>
-                        <Grid Grid.Row="1" ColumnDefinitions="*,*">
-                            <Button Grid.Column="0" Text="Reset" Command="{Binding ResetCommand}" />
-                            <Button Grid.Column="1" Text="Delete"
-                                    Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:MainViewModel}},
-                                    Path=DeleteCounterCommand}"
-                                    CommandParameter="{Binding .}" />
-                        </Grid>
-                    </Grid>
+
+                    </Border>
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>

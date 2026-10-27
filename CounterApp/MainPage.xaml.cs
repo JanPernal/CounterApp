@@ -18,6 +18,4 @@ public partial class MainPage : ContentPage
         base.OnAppearing();
         _viewModel.LoadCommand.Execute(null);
     }
-
-
 }

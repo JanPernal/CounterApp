@@ -55,22 +55,20 @@ Reading: interfaces in C#, async/await, LINQ to XML (`XDocument`, `XElement`), F
 - [x] Commit + push
 - [ ] Optional (later): creation form as a separate page (Shell navigation, `GoToAsync`)
 
-## In progress
-
-### Grade 6: color, data storage, reset, delete
+### Grade 6: color, data storage, reset, delete — complete
 - [x] Reset to initial value (already done in Refactor 1)
 - [x] Data stored in a "more convenient" format: XML / XDocument (done in Grade 4)
-- [ ] Check the official task: is SQLite required, or was it only in the reading list?
+- [x] Check the official task: SQLite is NOT required when data is already stored in a convenient format (XDocument) → Grade 6 complete
 
 Step 1: delete a counter
 - [x] `[RelayCommand] async Task DeleteCounter(CounterViewModel counter)` in `MainViewModel`
 - [x] Confirmation with `DisplayAlertAsync` (returns `bool`; `DisplayAlert` is obsolete in .NET 10)
 - [x] Unsubscribe `counter.Changed -= OnCounterChanged`, remove from `Counters`, save
 - [x] "Delete" button in the `DataTemplate`, bound to the parent view model (`RelativeSource AncestorType`) with `CommandParameter="{Binding .}"`
-- [ ] Test: delete, restart → still gone; cancel → nothing happens
+- [x] Test: delete, restart → still gone; cancel → nothing happens
 
 Step 2: color per counter
-Design decision: a fixed palette of ~20 colors (same saturation + brightness, only hue changes). Each counter stores its base color as `ColorHex` (no model/XML change). Light/dark variants for buttons and icons are computed from it by the converter.
+Design decision: a fixed palette of 10 official Figma colors (started as 20 generated hues). Each counter stores its base color as `ColorHex` (no model/XML change). Light/dark variants for buttons and icons are computed from it by the converter.
 - [x] 2a. `Converters/HexToColorConverter.cs` (`IValueConverter`, `Color.FromArgb`, fallback for empty/invalid text, `ConvertBack` not supported)
 - [x] 2b. Register it in `<ContentPage.Resources>` and use it to color each counter in the list
 - [x] 2c. `ConverterParameter` variants: `Light` (button background) and `Dark` (icon), rebuilt from the hue with `Color.FromHsla` (Light S70 L85, Dark S100 L24)
@@ -78,19 +76,35 @@ Design decision: a fixed palette of ~20 colors (same saturation + brightness, on
 - [x] 2e. `MainViewModel`: `AvailableColors` (from the palette), `NewColorHex`, `SelectColor(string hex)` command, `AddCounter` copies `NewColorHex`
 - [x] 2d+. Official Figma palette: 10 hand-picked base colors (equal hue steps gave near-identical greens and blues); Light/Dark still computed from the hue
 - [x] 2f. Swatch grid in the form (`FlexLayout` wrap + `BindableLayout`) calling `SelectColorCommand`
-- [ ] 2g. Selected swatch visibly marked: `ColorOptionViewModel` (Hex + `IsSelected`) + `DataTrigger`
-- [ ] Test: new counters get the chosen color, colors survive restart
+- [x] 2g. Selected swatch visibly marked: `ColorOptionViewModel` (Hex + `IsSelected`) + `DataTrigger`
+- [x] Test: new counters get the chosen color, colors survive restart
 
-Later: new UI (from the mockup)
-- [ ] Card per counter: `Border` with rounded corners, color dot + name, big value (`StringFormat='{0:N0}'` → 1,100)
-- [ ] `-` button in the light variant with a dark icon, `+` button in the base color with a white icon
-- [ ] `SwipeView`: swipe left → Delete (red, trash icon), swipe right → Reset (grey, reset icon)
-- [ ] Probably: creation form on its own page (Shell navigation)
-
-Step 3 (optional extra)
+Optional extra
 - [ ] `JsonCounterStorage` swapped in via DI (one line in `MauiProgram.cs`) to show off the interface
 
 Reading: commands with parameters, `RelativeSource` bindings, pop-ups (`DisplayAlertAsync`), value converters, colors in MAUI, local SQLite database in MAUI.
+
+## In progress
+
+### New UI (from the Figma mockup)
+Step A: counter card
+- [ ] `Border` with rounded corners (`StrokeShape="RoundRectangle 24"`), light grey background, no stroke
+- [ ] Top-left: color dot (`BoxView` / `Ellipse`) + name in small text
+- [ ] Big bold value with thousands separator (`StringFormat='{0:N0}'` → 1,100)
+- [ ] Right: `−` / `+` pill (light variant + dark icon, base color + white icon)
+
+Step B: swipe actions
+- [ ] `SwipeView` around the card: swipe left → Delete (red, trash icon, keeps the confirmation), swipe right → Reset (grey, reset icon)
+- [ ] Remove the old Reset / Delete buttons
+
+Step C: creation form on its own page
+- [ ] `NewCounterPage` + Shell route, `GoToAsync`, "+" in the main page header
+- [ ] Main page shows only the list (cards at the bottom, as in the mockup)
+
+Step D: polish
+- [ ] Icons (trash, reset, minus, plus) as font icons or SVG images
+- [ ] Custom font (if the mockup uses one), page background, spacing
+- [ ] Optional: `_loaded` flag in `OnAppearing` (needed once navigation exists, so returning from the form does not reload)
 
 ## Extra materials
 - .NET MAUI Workshop (official, step by step: MVVM, CollectionView, navigation)
