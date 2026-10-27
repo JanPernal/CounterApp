@@ -6,12 +6,11 @@
              xmlns:viewModels="clr-namespace:CounterApp.ViewModels"
              xmlns:converters="clr-namespace:CounterApp.Converters"
              x:DataType="viewModels:MainViewModel"
-             BackgroundColor="#FCFCFC">
+             BackgroundColor="{StaticResource PageBackground}">
     <ContentPage.Resources>
         <converters:HexToColorConverter x:Key="HexToColor" />
     </ContentPage.Resources>
     <Grid RowDefinitions="Auto,Auto,Auto,Auto,*" Padding="16" RowSpacing="12">
-        <Label Grid.Row="0" Text="Counters" HorizontalOptions="Center" TextColor="Brown" />
         <Entry Grid.Row="1" Text="{Binding NewCounterName}" Placeholder="Counter name" />
         <Grid Grid.Row="2" ColumnDefinitions="*,Auto,Auto" ColumnSpacing="8">
             <Entry Grid.Column="0" Text="{Binding NewInitialValue}" Placeholder="Initial value" />
@@ -45,7 +44,7 @@
             </CollectionView.ItemsLayout>
             <CollectionView.ItemTemplate>
                 <DataTemplate x:DataType="viewModels:CounterViewModel">
-                    <Border StrokeThickness="0" Padding="36" BackgroundColor="#F3F3F3">
+                    <Border StrokeThickness="0" Padding="36" BackgroundColor="{StaticResource CardBackground}">
                         <Border.StrokeShape>
                             <RoundRectangle CornerRadius="50" />
                         </Border.StrokeShape>
@@ -57,10 +56,10 @@
                                             BackgroundColor="{Binding ColorHex, Converter={StaticResource HexToColor}}"
                                             WidthRequest="16" HeightRequest="16" CornerRadius="8" />
                                         <Label VerticalOptions="Center" Text="{Binding Name}"
-                                               Style="{StaticResource CounterName}" />
+                                               Style="{StaticResource CounterName}"/>
                                     </HorizontalStackLayout>
                                     <Label Grid.Row="1" Text="{Binding Value, StringFormat='{0:N0}'}"
-                                           Style="{StaticResource Value}" />
+                                           Style="{StaticResource Value}"/>
                                 </Grid>
                                 <Border Grid.Column="1" StrokeThickness="0"
                                         BackgroundColor="{Binding ColorHex, Converter={StaticResource HexToColor}, ConverterParameter=Light}">
@@ -69,25 +68,21 @@
                                     </Border.StrokeShape>
                                     <Grid ColumnDefinitions="*,*">
                                         <Button Grid.Column="0"
-                                                Text="-"
+                                                Text="−"
                                                 Command="{Binding DecrementCommand}"
                                                 BackgroundColor="Transparent"
                                                 TextColor="{Binding ColorHex, Converter={StaticResource HexToColor}, ConverterParameter=Dark}"
                                                 Padding="15, 0, 15, 6"
                                                 Style="{StaticResource PillBtn}" />
-                                        <Border Grid.Column="1" StrokeThickness="0"
-                                                BackgroundColor="{Binding ColorHex, Converter={StaticResource HexToColor}, ConverterParameter=Light}">
-                                            <Border.StrokeShape>
-                                                <RoundRectangle CornerRadius="24" />
-                                            </Border.StrokeShape>
-                                            <Button
-                                                Text="+"
-                                                Command="{Binding IncrementCommand}"
-                                                BackgroundColor="{Binding ColorHex, Converter={StaticResource HexToColor}}"
-                                                TextColor="White"
-                                                Padding="15, 0, 15, 6"
-                                                Style="{StaticResource PillBtn}" />
-                                        </Border>
+                                        <Button
+                                            Grid.Column="1"
+                                            CornerRadius="24"
+                                            Text="+"
+                                            Command="{Binding IncrementCommand}"
+                                            BackgroundColor="{Binding ColorHex, Converter={StaticResource HexToColor}}"
+                                            TextColor="{StaticResource CardBackground}"
+                                            Padding="15, 0, 15, 6"
+                                            Style="{StaticResource PillBtn}" />
                                     </Grid>
                                 </Border>
 

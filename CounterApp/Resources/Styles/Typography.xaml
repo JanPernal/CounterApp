@@ -3,10 +3,12 @@
     <Style x:Key="CounterName" TargetType="Label">
         <Setter Property="FontFamily" Value="InterRegular" />
         <Setter Property="FontSize" Value="13" />
+        <Setter Property="TextColor" Value="{StaticResource TextPrimary}" />
     </Style>
     <Style x:Key="Value" TargetType="Label">
         <Setter Property="FontFamily" Value="InterExtraBold" />
         <Setter Property="FontSize" Value="55" />
+        <Setter Property="TextColor" Value="{StaticResource TextPrimary}" />
     </Style>
     <Style x:Key="PillBtn" TargetType="Button">
         <Setter Property="FontFamily" Value="InterExtraBold" />
