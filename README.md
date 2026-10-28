@@ -25,23 +25,8 @@ This is my school project for learning .NET MAUI. I designed the look in Figma f
   - **iPhone / iPad:** swipe left to delete, swipe right to reset
   - **Mac / Windows:** normal buttons next to the counter
 
-## How to run
+## Requirements
 
 You need .NET 10 with the MAUI workload and Xcode (for iPhone and Mac).
-
-Run on Mac:
-```
-cd CounterApp
-dotnet build -t:Build -t:Run -f net10.0-maccatalyst
-```
-
-Run on iPhone (connected and unlocked):
-```
-cd CounterApp
-dotnet build -t:Build -t:Run -f net10.0-ios -p:_DeviceName=<your iPhone UDID>
-```
-
-You can also just use Rider and press Run.
-
 
 ![Logo](CounterApp/Resources/AppIcon/appicon.png)
