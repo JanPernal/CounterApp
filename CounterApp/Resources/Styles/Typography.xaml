@@ -28,9 +28,12 @@
         <Setter Property="WidthRequest" Value="200" />
     </Style>
     <Style x:Key="ActionDesktop" TargetType="Button">
-        <Setter Property="FontFamily" Value="InterRegular" />
-        <Setter Property="WidthRequest" Value="200" />
-        <Setter Property="FontSize" Value="36" />
-        <Setter Property="TextColor" Value="{StaticResource PageBackground}" />
+        <Setter Property="FontFamily" Value="MaterialIcons" />
+        <Setter Property="FontSize" Value="40" />
+        <Setter Property="TextColor" Value="{StaticResource CardBackground}" />
+        <Setter Property="CornerRadius" Value="50" />
+        <Setter Property="WidthRequest" Value="120" />
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="VerticalOptions" Value="Fill" />
     </Style>
 </ResourceDictionary>

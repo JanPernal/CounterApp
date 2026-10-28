@@ -45,29 +45,28 @@
 
         <!-- Desktop: card + buttons -->
         <DataTemplate x:Key="ButtonsCounterTemplate" x:DataType="viewModels:CounterViewModel">
-            <Grid ColumnDefinitions="*,Auto" ColumnSpacing="12">
+            <Grid ColumnDefinitions="*,Auto,Auto" ColumnSpacing="12">
                 <views:CounterCard Grid.Column="0" />
-                <Grid Grid.Column="1" RowDefinitions="Auto,Auto">
-                    <Button Grid.Row="0" Text="Reset" Command="{Binding ResetCommand}"
-                            BackgroundColor="{StaticResource ResetColor}"
-                            Style="{StaticResource ActionDesktop}"/>
-                    <Button Grid.Row="1" Text="Delete"
-                            Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:MainViewModel}}, Path=DeleteCounterCommand}"
-                            CommandParameter="{Binding .}"
-                            BackgroundColor="{StaticResource DeleteColor}"
-                            Style="{StaticResource ActionDesktop}"/>
-                </Grid>
+                <!-- MaterialIcons Reset-Icon -->
+                <Button Grid.Column="1" Text="&#xE5D5;"
+                        Command="{Binding ResetCommand}"
+                        BackgroundColor="{StaticResource ResetColor}"
+                        Style="{StaticResource ActionDesktop}" />
+                <!-- MaterialIcons Delete-Icon -->
+                <Button Grid.Column="2" Text="&#xE872;"
+                        Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:MainViewModel}}, Path=DeleteCounterCommand}"
+                        CommandParameter="{Binding .}"
+                        BackgroundColor="{StaticResource DeleteColor}"
+                        Style="{StaticResource ActionDesktop}" />
             </Grid>
         </DataTemplate>
     </ContentPage.Resources>
 
     <Grid RowDefinitions="Auto,Auto,Auto,Auto,*" Padding="16" RowSpacing="12">
         <Entry Grid.Row="1" Text="{Binding NewCounterName}" Placeholder="Counter name" />
-        <Grid Grid.Row="2" ColumnDefinitions="*,Auto,Auto" ColumnSpacing="8">
+        <Grid Grid.Row="2" ColumnDefinitions="*,Auto" ColumnSpacing="8">
             <Entry Grid.Column="0" Text="{Binding NewInitialValue}" Placeholder="Initial value" />
             <Button Grid.Column="1" Text="New Counter" Command="{Binding AddCounterCommand}" />
-            <BoxView Grid.Column="2" Color="{Binding NewColorHex, Converter={StaticResource HexToColor}}"
-                     WidthRequest="24" HeightRequest="24" CornerRadius="12" />
         </Grid>
         <FlexLayout Grid.Row="3" Wrap="Wrap"
                     BindableLayout.ItemsSource="{Binding AvailableColors}">
