@@ -13,11 +13,19 @@ public partial class MainViewModel : ObservableObject
 
     [ObservableProperty] private string newColorHex = ColorPalette.Default;
 
+    [ObservableProperty] private bool isAddFormOpen;
+
     [ObservableProperty] [NotifyCanExecuteChangedFor(nameof(AddCounterCommand))]
     private string newCounterName = "";
 
     [ObservableProperty] [NotifyCanExecuteChangedFor(nameof(AddCounterCommand))]
     private string newInitialValue = "";
+
+    [RelayCommand]
+    private void ToggleAddForm()
+    {
+        IsAddFormOpen = !IsAddFormOpen;
+    }
 
     public MainViewModel(ICounterStorage storage)
     {

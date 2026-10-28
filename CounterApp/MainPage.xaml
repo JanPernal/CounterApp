@@ -6,7 +6,9 @@
              xmlns:views="clr-namespace:CounterApp.Views"
              x:Class="CounterApp.MainPage"
              x:DataType="viewModels:MainViewModel"
-             BackgroundColor="{StaticResource PageBackground}">
+             BackgroundColor="{StaticResource PageBackground}"
+             Padding="18"
+             Shell.NavBarIsVisible="False">
     <ContentPage.Resources>
         <!-- Phone / tablet: swipe -->
         <DataTemplate x:Key="SwipeCounterTemplate" x:DataType="viewModels:CounterViewModel">
@@ -18,7 +20,7 @@
                                     Style="{StaticResource Action}"
                                     Margin="4,0">
                                 <!-- MaterialIcons Reset-Icon -->
-                                <Label Text="&#xE5D5;" Style="{StaticResource SwipeIcon}"/>
+                                <Label Text="&#xE5D5;" Style="{StaticResource SwipeIcon}" />
                             </Border>
                         </SwipeItemView>
                     </SwipeItems>
@@ -33,7 +35,7 @@
                                     Style="{StaticResource Action}"
                                     Margin="4,0">
                                 <!-- MaterialIcons Delete-Icon -->
-                                <Label Text="&#xE872;" Style="{StaticResource SwipeIcon}"/>
+                                <Label Text="&#xE872;" Style="{StaticResource SwipeIcon}" />
                             </Border>
                         </SwipeItemView>
                     </SwipeItems>
@@ -61,40 +63,70 @@
             </Grid>
         </DataTemplate>
     </ContentPage.Resources>
+    <Grid RowDefinitions="Auto,Auto, *">
+        <Grid Grid.Row="0" ColumnDefinitions="*,Auto" Padding="0, 72, 0,36">
+            <Label Grid.Column="0" Text="Counters" Style="{StaticResource Value}"
+                   FontSize="32" VerticalOptions="Center" />
 
-    <Grid RowDefinitions="Auto,Auto,Auto,Auto,*" Padding="16" RowSpacing="12">
-        <Entry Grid.Row="1" Text="{Binding NewCounterName}" Placeholder="Counter name" />
-        <Grid Grid.Row="2" ColumnDefinitions="*,Auto" ColumnSpacing="8">
-            <Entry Grid.Column="0" Text="{Binding NewInitialValue}" Placeholder="Initial value" />
-            <Button Grid.Column="1" Text="New Counter" Command="{Binding AddCounterCommand}" />
+            <Button Grid.Column="1"
+                    Command="{Binding ToggleAddFormCommand}"
+                    FontFamily="MaterialIcons" FontSize="32"
+                    WidthRequest="56" HeightRequest="56" CornerRadius="28" Padding="0"
+                    BackgroundColor="{StaticResource TextPrimary}"
+                    TextColor="{StaticResource CardBackground}">
+                <Button.Triggers>
+                    <DataTrigger TargetType="Button" Binding="{Binding IsAddFormOpen}" Value="False">
+                        <Setter Property="Text" Value="&#xE145;" />
+                    </DataTrigger>
+                    <DataTrigger TargetType="Button" Binding="{Binding IsAddFormOpen}" Value="True">
+                        <Setter Property="Text" Value="&#xE5CD;" />
+                    </DataTrigger>
+                </Button.Triggers>
+            </Button>
         </Grid>
-        <FlexLayout Grid.Row="3" Wrap="Wrap"
-                    BindableLayout.ItemsSource="{Binding AvailableColors}">
-            <BindableLayout.ItemTemplate>
-                <DataTemplate x:DataType="viewModels:ColorOptionViewModel">
-                    <Button BackgroundColor="{Binding Hex, Converter={StaticResource HexToColor}}"
-                            Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:MainViewModel}},
-                            Path=SelectColorCommand}"
-                            CommandParameter="{Binding .}"
-                            WidthRequest="32" HeightRequest="32" CornerRadius="8"
-                            Margin="4">
-                        <Button.Triggers>
-                            <DataTrigger TargetType="Button" Binding="{Binding IsSelected}" Value="True">
-                                <Setter Property="BorderColor" Value="Black" />
-                                <Setter Property="BorderWidth" Value="3" />
-                            </DataTrigger>
-                        </Button.Triggers>
-                    </Button>
-                </DataTemplate>
-            </BindableLayout.ItemTemplate>
-        </FlexLayout>
-        <CollectionView Grid.Row="4" ItemsSource="{Binding Counters}"
+        <Border Grid.Row="1"
+                IsVisible="{Binding IsAddFormOpen}"
+                BackgroundColor="{StaticResource CardBackground}"
+                StrokeThickness="0" Padding="36" Margin="0,0,0, 18">
+            <Border.StrokeShape>
+                <RoundRectangle CornerRadius="50" />
+            </Border.StrokeShape>
+
+            <VerticalStackLayout Spacing="12">
+                <Entry Text="{Binding NewCounterName}" Placeholder="Counter name" Margin="4"/>
+                <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8">
+                    <Entry Grid.Column="0" Text="{Binding NewInitialValue}" Placeholder="Initial value" />
+                    <Button Grid.Column="1" Text="New Counter" Command="{Binding AddCounterCommand}"/>
+                </Grid>
+                <FlexLayout Wrap="Wrap" BindableLayout.ItemsSource="{Binding AvailableColors}">
+                    <BindableLayout.ItemTemplate>
+                        <DataTemplate x:DataType="viewModels:ColorOptionViewModel">
+                            <Button BackgroundColor="{Binding Hex, Converter={StaticResource HexToColor}}"
+                                    Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:MainViewModel}},
+                                    Path=SelectColorCommand}"
+                                    CommandParameter="{Binding .}"
+                                    WidthRequest="32" HeightRequest="32" CornerRadius="8"
+                                    Margin="4">
+                                <Button.Triggers>
+                                    <DataTrigger TargetType="Button" Binding="{Binding IsSelected}" Value="True">
+                                        <Setter Property="BorderColor" Value="{Binding Hex, Converter={StaticResource HexToColor}, ConverterParameter=Dark}" />
+                                        <Setter Property="BorderWidth" Value="3" />
+                                    </DataTrigger>
+                                </Button.Triggers>
+                            </Button>
+                        </DataTemplate>
+                    </BindableLayout.ItemTemplate>
+                </FlexLayout>
+            </VerticalStackLayout>
+        </Border>
+        <CollectionView Grid.Row="2" ItemsSource="{Binding Counters}"
                         ItemTemplate="{OnIdiom Phone={StaticResource SwipeCounterTemplate},
                                                Tablet={StaticResource SwipeCounterTemplate},
                                                Default={StaticResource ButtonsCounterTemplate}}">
             <CollectionView.ItemsLayout>
-                <LinearItemsLayout Orientation="Vertical" ItemSpacing="36" />
+                <LinearItemsLayout Orientation="Vertical" ItemSpacing="18" />
             </CollectionView.ItemsLayout>
         </CollectionView>
     </Grid>
+
 </ContentPage>

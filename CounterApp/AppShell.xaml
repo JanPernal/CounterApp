@@ -8,7 +8,6 @@
     Title="CounterApp">
 
     <ShellContent
-        Title="Counters"
         ContentTemplate="{DataTemplate counterApp:MainPage}"
         Route="MainPage" />
 </Shell>
