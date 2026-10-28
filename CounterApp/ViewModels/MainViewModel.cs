@@ -11,34 +11,33 @@ public partial class MainViewModel : ObservableObject
 {
     private readonly ICounterStorage _storage;
 
-    public IReadOnlyList<ColorOptionViewModel> AvailableColors { get; } =
-        ColorPalette.BaseColors
-            .Select(c => new ColorOptionViewModel { Hex = c, IsSelected = c == ColorPalette.Default })
-            .ToList();
+    [ObservableProperty] private string newColorHex = ColorPalette.Default;
+
+    [ObservableProperty] [NotifyCanExecuteChangedFor(nameof(AddCounterCommand))]
+    private string newCounterName = "";
+
+    [ObservableProperty] [NotifyCanExecuteChangedFor(nameof(AddCounterCommand))]
+    private string newInitialValue = "";
 
     public MainViewModel(ICounterStorage storage)
     {
         _storage = storage;
     }
-    public ObservableCollection<CounterViewModel> Counters {get; } = new();
 
-    [ObservableProperty]
-    private string newColorHex = ColorPalette.Default;
 
-    [ObservableProperty]
-    [NotifyCanExecuteChangedFor(nameof(AddCounterCommand))]
-    private string newCounterName = "";
+    public IReadOnlyList<ColorOptionViewModel> AvailableColors { get; } =
+        ColorPalette.BaseColors
+            .Select(c => new ColorOptionViewModel { Hex = c, IsSelected = c == ColorPalette.Default })
+            .ToList();
 
-    [ObservableProperty]
-    [NotifyCanExecuteChangedFor(nameof(AddCounterCommand))]
-    private string newInitialValue = "";
+    public ObservableCollection<CounterViewModel> Counters { get; } = new();
 
     [RelayCommand(CanExecute = nameof(CanAdd))]
     private async Task AddCounter()
     {
         CounterViewModel newCounter = new();
         newCounter.Name = NewCounterName;
-        TryGetInitialValue(out int parsedInitialValue);
+        TryGetInitialValue(out var parsedInitialValue);
         newCounter.Value = newCounter.InitialValue = parsedInitialValue;
         newCounter.ColorHex = NewColorHex;
         NewInitialValue = "";
@@ -46,19 +45,23 @@ public partial class MainViewModel : ObservableObject
         AddToList(newCounter);
         await SaveAsync();
     }
-    private bool CanAdd() => !string.IsNullOrWhiteSpace(NewCounterName) && TryGetInitialValue(out _);
 
-    private async Task SaveAsync() => await _storage.SaveAsync(Counters.Select(vm => vm.ToModel()));
+    private bool CanAdd()
+    {
+        return !string.IsNullOrWhiteSpace(NewCounterName) && TryGetInitialValue(out _);
+    }
+
+    private async Task SaveAsync()
+    {
+        await _storage.SaveAsync(Counters.Select(vm => vm.ToModel()));
+    }
 
     [RelayCommand]
     private async Task Load()
     {
         var counters = await _storage.LoadAsync();
         Counters.Clear();
-        foreach (var counter in counters)
-        {
-            AddToList(CounterViewModel.FromModel(counter));
-        }
+        foreach (var counter in counters) AddToList(CounterViewModel.FromModel(counter));
     }
 
     private void AddToList(CounterViewModel counter)
@@ -77,7 +80,6 @@ public partial class MainViewModel : ObservableObject
         {
             Debug.Write(ex.ToString());
         }
-
     }
 
     private bool TryGetInitialValue(out int value)
@@ -87,13 +89,14 @@ public partial class MainViewModel : ObservableObject
             value = 0;
             return true;
         }
+
         return int.TryParse(NewInitialValue, out value);
     }
 
     [RelayCommand]
     private async Task DeleteCounter(CounterViewModel counter)
     {
-        bool confirmed = await Shell.Current.DisplayAlertAsync(
+        var confirmed = await Shell.Current.DisplayAlertAsync(
             "Delete counter", $"Delete \"{counter.Name}\"?", "Delete", "Cancel");
         if (!confirmed) return;
         counter.Changed -= OnCounterChanged;
@@ -105,9 +108,6 @@ public partial class MainViewModel : ObservableObject
     private void SelectColor(ColorOptionViewModel option)
     {
         NewColorHex = option.Hex;
-        foreach (var color in AvailableColors)
-        {
-            color.IsSelected = color == option;
-        }
+        foreach (var color in AvailableColors) color.IsSelected = color == option;
     }
 }

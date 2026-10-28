@@ -10,12 +10,9 @@ public class XmlCounterStorage : ICounterStorage
 
     public async Task<List<Counter>> LoadAsync()
     {
-        if (!File.Exists(_filePath))
-        {
-            return new List<Counter>();
-        }
-        await using FileStream stream = File.OpenRead(_filePath);
-        XDocument doc = await XDocument.LoadAsync(stream, LoadOptions.None, CancellationToken.None);
+        if (!File.Exists(_filePath)) return new List<Counter>();
+        await using var stream = File.OpenRead(_filePath);
+        var doc = await XDocument.LoadAsync(stream, LoadOptions.None, CancellationToken.None);
         return doc.Root!.Elements("Counter").Select(e => new Counter
         {
             Id = (Guid?)e.Attribute("Id") ?? Guid.NewGuid(),
@@ -24,7 +21,6 @@ public class XmlCounterStorage : ICounterStorage
             InitialValue = (int?)e.Attribute("InitialValue") ?? 0,
             ColorHex = (string?)e.Attribute("ColorHex") ?? ColorPalette.Default
         }).ToList();
-
     }
 
     public async Task SaveAsync(IEnumerable<Counter> counters)
@@ -32,7 +28,7 @@ public class XmlCounterStorage : ICounterStorage
         await _lock.WaitAsync();
         try
         {
-            XDocument counterStorage = new XDocument(
+            var counterStorage = new XDocument(
                 new XElement("Counters",
                     counters.Select(c => new XElement("Counter", new XAttribute("Id", c.Id)
                         , new XAttribute("Name", c.Name)
@@ -41,13 +37,12 @@ public class XmlCounterStorage : ICounterStorage
                         , new XAttribute("ColorHex", c.ColorHex)))
                 )
             );
-            await using FileStream stream = File.Create(_filePath);
+            await using var stream = File.Create(_filePath);
             await counterStorage.SaveAsync(stream, SaveOptions.None, CancellationToken.None);
         }
         finally
         {
             _lock.Release();
         }
-
     }
 }

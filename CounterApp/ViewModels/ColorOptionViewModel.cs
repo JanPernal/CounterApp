@@ -4,6 +4,6 @@ namespace CounterApp.ViewModels;
 
 public partial class ColorOptionViewModel : ObservableObject
 {
-    public required string Hex { get; init; }
     [ObservableProperty] private bool isSelected;
+    public required string Hex { get; init; }
 }

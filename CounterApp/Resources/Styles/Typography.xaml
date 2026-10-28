@@ -10,8 +10,27 @@
         <Setter Property="FontSize" Value="55" />
         <Setter Property="TextColor" Value="{StaticResource TextPrimary}" />
     </Style>
+
     <Style x:Key="PillBtn" TargetType="Button">
         <Setter Property="FontFamily" Value="InterExtraBold" />
         <Setter Property="FontSize" Value="55" />
+    </Style>
+    <Style x:Key="SwipeIcon" TargetType="Label">
+        <Setter Property="FontFamily" Value="MaterialIcons" />
+        <Setter Property="FontSize" Value="48" />
+        <Setter Property="TextColor" Value="{StaticResource CardBackground}" />
+        <Setter Property="HorizontalOptions" Value="Center" />
+        <Setter Property="VerticalOptions" Value="Center" />
+    </Style>
+    <Style x:Key="Action" TargetType="Border">
+        <Setter Property="Stroke" Value="Transparent" />
+        <Setter Property="StrokeShape" Value="RoundRectangle 50" />
+        <Setter Property="WidthRequest" Value="200" />
+    </Style>
+    <Style x:Key="ActionDesktop" TargetType="Button">
+        <Setter Property="FontFamily" Value="InterRegular" />
+        <Setter Property="WidthRequest" Value="200" />
+        <Setter Property="FontSize" Value="36" />
+        <Setter Property="TextColor" Value="{StaticResource PageBackground}" />
     </Style>
 </ResourceDictionary>

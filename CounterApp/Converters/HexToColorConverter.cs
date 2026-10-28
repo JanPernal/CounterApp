@@ -17,6 +17,7 @@ public class HexToColorConverter : IValueConverter
                 _ => baseColor
             };
         }
+
         return Colors.Gray;
     }
 

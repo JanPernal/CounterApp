@@ -10,32 +10,53 @@
     <ContentPage.Resources>
         <!-- Phone / tablet: swipe -->
         <DataTemplate x:Key="SwipeCounterTemplate" x:DataType="viewModels:CounterViewModel">
-            <SwipeView>
+            <SwipeView Threshold="220">
                 <SwipeView.LeftItems>
-                    <SwipeItems>
-                        <SwipeItem Text="Reset" BackgroundColor="LightGray"
-                                   Command="{Binding ResetCommand}" />
+                    <SwipeItems Mode="Execute" SwipeBehaviorOnInvoked="Close">
+                        <SwipeItemView Command="{Binding ResetCommand}">
+                            <Border BackgroundColor="{StaticResource ResetColor}"
+                                    Style="{StaticResource Action}"
+                                    Margin="4,0">
+                                <!-- MaterialIcons Reset-Icon -->
+                                <Label Text="&#xE5D5;" Style="{StaticResource SwipeIcon}"/>
+                            </Border>
+                        </SwipeItemView>
                     </SwipeItems>
                 </SwipeView.LeftItems>
+
                 <SwipeView.RightItems>
-                    <SwipeItems>
-                        <SwipeItem Text="Delete" BackgroundColor="#B33A3A"
-                                   Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:MainViewModel}}, Path=DeleteCounterCommand}"
-                                   CommandParameter="{Binding .}" />
+                    <SwipeItems Mode="Execute" SwipeBehaviorOnInvoked="Close">
+                        <SwipeItemView
+                            Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:MainViewModel}}, Path=DeleteCounterCommand}"
+                            CommandParameter="{Binding .}">
+                            <Border BackgroundColor="{StaticResource DeleteColor}"
+                                    Style="{StaticResource Action}"
+                                    Margin="4,0">
+                                <!-- MaterialIcons Delete-Icon -->
+                                <Label Text="&#xE872;" Style="{StaticResource SwipeIcon}"/>
+                            </Border>
+                        </SwipeItemView>
                     </SwipeItems>
                 </SwipeView.RightItems>
+
                 <views:CounterCard />
             </SwipeView>
         </DataTemplate>
 
         <!-- Desktop: card + buttons -->
         <DataTemplate x:Key="ButtonsCounterTemplate" x:DataType="viewModels:CounterViewModel">
-            <Grid ColumnDefinitions="*,Auto,Auto" ColumnSpacing="12">
+            <Grid ColumnDefinitions="*,Auto" ColumnSpacing="12">
                 <views:CounterCard Grid.Column="0" />
-                <Button Grid.Column="1" Text="Reset" Command="{Binding ResetCommand}" VerticalOptions="Center" />
-                <Button Grid.Column="2" Text="Delete"
-                        Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:MainViewModel}}, Path=DeleteCounterCommand}"
-                        CommandParameter="{Binding .}" VerticalOptions="Center" />
+                <Grid Grid.Column="1" RowDefinitions="Auto,Auto">
+                    <Button Grid.Row="0" Text="Reset" Command="{Binding ResetCommand}"
+                            BackgroundColor="{StaticResource ResetColor}"
+                            Style="{StaticResource ActionDesktop}"/>
+                    <Button Grid.Row="1" Text="Delete"
+                            Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:MainViewModel}}, Path=DeleteCounterCommand}"
+                            CommandParameter="{Binding .}"
+                            BackgroundColor="{StaticResource DeleteColor}"
+                            Style="{StaticResource ActionDesktop}"/>
+                </Grid>
             </Grid>
         </DataTemplate>
     </ContentPage.Resources>
@@ -72,7 +93,9 @@
                         ItemTemplate="{OnIdiom Phone={StaticResource SwipeCounterTemplate},
                                                Tablet={StaticResource SwipeCounterTemplate},
                                                Default={StaticResource ButtonsCounterTemplate}}">
-
+            <CollectionView.ItemsLayout>
+                <LinearItemsLayout Orientation="Vertical" ItemSpacing="36" />
+            </CollectionView.ItemsLayout>
         </CollectionView>
     </Grid>
 </ContentPage>
