@@ -25,6 +25,7 @@ public partial class MainViewModel : ObservableObject
     private void ToggleAddForm()
     {
         IsAddFormOpen = !IsAddFormOpen;
+        Haptic(HapticFeedbackType.Click);
     }
 
     public MainViewModel(ICounterStorage storage)
@@ -51,6 +52,7 @@ public partial class MainViewModel : ObservableObject
         NewInitialValue = "";
         NewCounterName = "";
         AddToList(newCounter);
+        Haptic(HapticFeedbackType.LongPress);
         await SaveAsync();
     }
 
@@ -109,6 +111,7 @@ public partial class MainViewModel : ObservableObject
         if (!confirmed) return;
         counter.Changed -= OnCounterChanged;
         Counters.Remove(counter);
+        Haptic(HapticFeedbackType.LongPress);
         await SaveAsync();
     }
 
@@ -117,5 +120,12 @@ public partial class MainViewModel : ObservableObject
     {
         NewColorHex = option.Hex;
         foreach (var color in AvailableColors) color.IsSelected = color == option;
+        Haptic(HapticFeedbackType.Click);
+    }
+
+    private static void Haptic(HapticFeedbackType type)
+    {
+        if (HapticFeedback.Default.IsSupported)
+            HapticFeedback.Default.Perform(type);
     }
 }

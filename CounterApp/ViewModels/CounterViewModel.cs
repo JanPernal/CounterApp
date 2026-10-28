@@ -22,12 +22,20 @@ public partial class CounterViewModel : ObservableObject
     private void Increment()
     {
         Value++;
+        Haptic(HapticFeedbackType.Click);
     }
 
     [RelayCommand]
     private void Decrement()
     {
         Value--;
+        Haptic(HapticFeedbackType.Click);
+    }
+
+    private static void Haptic(HapticFeedbackType type)
+    {
+        if (HapticFeedback.Default.IsSupported)
+            HapticFeedback.Default.Perform(type);
     }
 
     [RelayCommand(CanExecute = nameof(CanReset))]
@@ -37,6 +45,7 @@ public partial class CounterViewModel : ObservableObject
             "Reset counter", $"Reset \"{Name}\"?", "Reset", "Cancel");
         if (!confirmed) return;
         Value = InitialValue;
+        Haptic(HapticFeedbackType.LongPress);
     }
 
     private bool CanReset()
